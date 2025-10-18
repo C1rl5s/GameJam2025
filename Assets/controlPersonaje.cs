@@ -4,7 +4,7 @@ using System.Collections;
 
 public class ControlPersonaje : MonoBehaviour
 {
-    public float velocidad = 3f;
+    public float velocidad = 5f;
     public Rigidbody2D myrigidBody2D;
     public bool facingRight;
 
@@ -13,6 +13,8 @@ public class ControlPersonaje : MonoBehaviour
     private float dashingPower = 24f;
     private float dashingCooldown = 0.5f;  // Tiempo de espera entre dashes (código corregido)
     private float dashingTime = 0.2f;
+    private bool onFloor = false;
+    private float jumpForce = 10f;
 
     private Vector2 movimiento;  // Variable para almacenar el movimiento horizontal
 
@@ -24,7 +26,6 @@ public class ControlPersonaje : MonoBehaviour
 
     void Update()
     {
-        // Detectar si Shift izquierdo está presionado con el nuevo Input System
         if (Keyboard.current.leftShiftKey.isPressed && canDash)
         {
             StartCoroutine(Dash());  // Inicia el Dash
@@ -33,34 +34,33 @@ public class ControlPersonaje : MonoBehaviour
         // Si no estamos dashing, procesamos el movimiento
         if (!isDashing)
         {
-            ProcesarMovimiento();
 
             // Movimiento hacia la derecha con la tecla "D"
-            if (Keyboard.current.dKey.isPressed)
+            if (Keyboard.current.rightArrowKey.isPressed)
             {
                 myrigidBody2D.linearVelocity = new Vector2(velocidad, myrigidBody2D.linearVelocity.y);  // Mueve al personaje a la derecha
                 facingRight = true;
             }
 
             // Movimiento hacia la izquierda con la tecla "A"
-            if (Keyboard.current.aKey.isPressed)
+            if (Keyboard.current.leftArrowKey.isPressed)
             {
                 myrigidBody2D.linearVelocity = new Vector2(-velocidad, myrigidBody2D.linearVelocity.y);  // Mueve al personaje a la izquierda
                 facingRight = false;
             }
 
             // Movimiento hacia abajo con la tecla "S"
-            if (Keyboard.current.sKey.isPressed)
+            if (Keyboard.current.downArrowKey.isPressed)
             {
                 myrigidBody2D.linearVelocity = new Vector2(myrigidBody2D.linearVelocity.x, -velocidad);  // Mueve al personaje hacia abajo
             }
-        }
-    }
 
-    void ProcesarMovimiento()
-    {
-        // Lógica de movimiento horizontal (puede ser a la izquierda o derecha)
-        myrigidBody2D.linearVelocity = new Vector2(movimiento.x * velocidad, myrigidBody2D.linearVelocity.y);
+            if (onFloor && Keyboard.current.spaceKey.isPressed)
+            {
+                myrigidBody2D.linearVelocity = new Vector2(myrigidBody2D.linearVelocity.x, jumpForce);
+            }
+
+        }
     }
 
     private IEnumerator Dash()
@@ -97,5 +97,23 @@ public class ControlPersonaje : MonoBehaviour
         yield return new WaitForSeconds(dashingCooldown);
 
         canDash = true;  // Ahora podemos hacer otro dash
+    }
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        // Comprobar si el jugador está tocando un suelo
+        if (col.CompareTag("Suelo"))
+        {
+            onFloor = true;  // El jugador está tocando el suelo
+        }
+    }
+
+    // Detecta cuando el jugador sale del trigger del suelo
+    void OnTriggerExit2D(Collider2D col)
+    {
+        // Comprobar si el jugador salió del suelo
+        if (col.CompareTag("Suelo"))
+        {
+            onFloor = false;  // El jugador ya no está tocando el suelo
+        }
     }
 }
