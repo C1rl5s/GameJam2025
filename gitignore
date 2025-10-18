@@ -1,0 +1,26 @@
+# Archivos y carpetas a ignorar en Unity
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+UserSettings/
+
+# Cache de paquetes
+/Packages/com.unity.package-manager*
+
+# Configuración del IDE
+.vs/
+.vscode/
+*.csproj
+*.sln
+*.user
+*.unityproj
+*.pidb
+*.suo
+*.userprefs
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
