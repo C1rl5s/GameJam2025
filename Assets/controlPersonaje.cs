@@ -26,14 +26,21 @@ public class ControlPersonaje : MonoBehaviour
 
     void Update()
     {
+        // Detectar si Shift izquierdo está presionado con el nuevo Input System
         if (Keyboard.current.leftShiftKey.isPressed && canDash)
         {
             StartCoroutine(Dash());  // Inicia el Dash
+            velocidad = 7f;
+        }
+        else
+        {
+            velocidad = 5f;
         }
 
         // Si no estamos dashing, procesamos el movimiento
         if (!isDashing)
         {
+            ProcesarMovimiento();
 
             // Movimiento hacia la derecha con la tecla "D"
             if (Keyboard.current.rightArrowKey.isPressed)
@@ -55,12 +62,17 @@ public class ControlPersonaje : MonoBehaviour
                 myrigidBody2D.linearVelocity = new Vector2(myrigidBody2D.linearVelocity.x, -velocidad);  // Mueve al personaje hacia abajo
             }
 
-            if (onFloor && Keyboard.current.spaceKey.isPressed)
+            if (onFloor && Keyboard.current.zKey.isPressed)
             {
                 myrigidBody2D.linearVelocity = new Vector2(myrigidBody2D.linearVelocity.x, jumpForce);
             }
-
         }
+    }
+
+    void ProcesarMovimiento()
+    {
+        // Lógica de movimiento horizontal (puede ser a la izquierda o derecha)
+        myrigidBody2D.linearVelocity = new Vector2(movimiento.x * velocidad, myrigidBody2D.linearVelocity.y);
     }
 
     private IEnumerator Dash()
@@ -98,6 +110,7 @@ public class ControlPersonaje : MonoBehaviour
 
         canDash = true;  // Ahora podemos hacer otro dash
     }
+
     void OnTriggerEnter2D(Collider2D col)
     {
         // Comprobar si el jugador está tocando un suelo
