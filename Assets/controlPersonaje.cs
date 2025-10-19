@@ -15,6 +15,7 @@ public class ControlPersonaje : MonoBehaviour
     private float dashingTime = 0.2f;
     private bool onFloor = false;
     private float jumpForce = 10f;
+    public Animator animator;
 
     private Vector2 movimiento;  // Variable para almacenar el movimiento horizontal
 
@@ -41,12 +42,18 @@ public class ControlPersonaje : MonoBehaviour
         if (!isDashing)
         {
             ProcesarMovimiento();
+            float velocidadHorizontal = Mathf.Abs(myrigidBody2D.linearVelocity.x);
+            animator.SetFloat("Speed", velocidadHorizontal);
+
 
             // Movimiento hacia la derecha con la tecla "D"
             if (Keyboard.current.rightArrowKey.isPressed)
             {
                 myrigidBody2D.linearVelocity = new Vector2(velocidad, myrigidBody2D.linearVelocity.y);  // Mueve al personaje a la derecha
                 facingRight = true;
+                
+                animator.SetFloat("Speed", velocidad);
+                transform.localScale = new Vector3(1, 1, 1);
             }
 
             // Movimiento hacia la izquierda con la tecla "A"
@@ -54,6 +61,9 @@ public class ControlPersonaje : MonoBehaviour
             {
                 myrigidBody2D.linearVelocity = new Vector2(-velocidad, myrigidBody2D.linearVelocity.y);  // Mueve al personaje a la izquierda
                 facingRight = false;
+               
+                animator.SetFloat("Speed", velocidad);
+                transform.localScale = new Vector3(-1, 1, 1);
             }
 
             // Movimiento hacia abajo con la tecla "S"
