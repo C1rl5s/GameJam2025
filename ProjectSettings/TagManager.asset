@@ -43,5 +43,8 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: capa objetos
+    uniqueID: 1383923899
+    locked: 0
   m_RenderingLayers:
   - Default
