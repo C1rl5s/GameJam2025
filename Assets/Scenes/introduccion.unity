@@ -827,6 +827,9 @@ MonoBehaviour:
   - "Hasta que despert\xF3."
   typingSpeed: 0.05
   typingSound: {fileID: 0}
+  changeSceneOnEnd: 1
+  nextSceneName: 
+  nextSceneIndex: 3
 --- !u!4 &1712568922
 Transform:
   m_ObjectHideFlags: 0

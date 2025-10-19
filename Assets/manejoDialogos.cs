@@ -1,7 +1,8 @@
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using System.Collections;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -19,6 +20,11 @@ public class DialogueManager : MonoBehaviour
     public float typingSpeed = 0.05f; // Velocidad entre letras
     public AudioClip typingSound; // Sonido opcional
     private AudioSource audioSource;
+
+    [Header("Scene Settings")]
+    public bool changeSceneOnEnd = false; // Activar para cambiar de escena
+    public string nextSceneName = ""; // Nombre de la escena
+    public int nextSceneIndex = -1; // O usar índice (-1 = no usar)
 
     private int currentIndex = 0;
     private bool isTyping = false;
@@ -54,9 +60,15 @@ public class DialogueManager : MonoBehaviour
         {
             if (isTyping && canSkip)
             {
-                // Completar texto instantáneamente
+                // Completar ambos textos instantáneamente
                 StopCoroutine(typingCoroutine);
+
+                if (characterNames.Length > currentIndex && characterNames[currentIndex] != "")
+                {
+                    nameText.text = characterNames[currentIndex];
+                }
                 dialogueText.text = dialogues[currentIndex];
+
                 isTyping = false;
                 ShowContinueIndicator();
             }
@@ -71,10 +83,15 @@ public class DialogueManager : MonoBehaviour
     {
         if (currentIndex < dialogues.Length)
         {
-            // Mostrar nombre
+            // Ocultar indicador
+            if (continueIndicator != null)
+                continueIndicator.SetActive(false);
+
+            // Aplicar efecto de máquina a AMBOS (nombre y diálogo)
+            string currentName = "";
             if (characterNames.Length > currentIndex && characterNames[currentIndex] != "")
             {
-                nameText.text = characterNames[currentIndex];
+                currentName = characterNames[currentIndex];
                 nameText.gameObject.SetActive(true);
             }
             else
@@ -82,29 +99,27 @@ public class DialogueManager : MonoBehaviour
                 nameText.gameObject.SetActive(false);
             }
 
-            // Iniciar efecto de máquina de escribir
-            if (continueIndicator != null)
-                continueIndicator.SetActive(false);
-
-            typingCoroutine = StartCoroutine(TypeText(dialogues[currentIndex]));
+            typingCoroutine = StartCoroutine(TypeBothTexts(currentName, dialogues[currentIndex]));
         }
     }
 
-    IEnumerator TypeText(string text)
+    IEnumerator TypeBothTexts(string name, string dialogue)
     {
         isTyping = true;
         canSkip = false;
+        nameText.text = "";
         dialogueText.text = "";
+
 
         // Pequeño delay antes de permitir saltar
         yield return new WaitForSeconds(0.2f);
         canSkip = true;
 
-        foreach (char letter in text.ToCharArray())
+        // Luego escribir el diálogo
+        foreach (char letter in dialogue.ToCharArray())
         {
             dialogueText.text += letter;
 
-            // Reproducir sonido (opcional)
             if (typingSound != null && audioSource != null && letter != ' ')
             {
                 audioSource.PlayOneShot(typingSound, 0.1f);
@@ -113,9 +128,27 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSeconds(typingSpeed);
         }
 
+
+        // Escribir el nombre primero
+        if (name != "")
+        {
+            foreach (char letter in name.ToCharArray())
+            {
+                nameText.text += letter;
+
+                if (typingSound != null && audioSource != null && letter != ' ')
+                {
+                    audioSource.PlayOneShot(typingSound, 0.1f);
+                }
+
+                yield return new WaitForSeconds(typingSpeed);
+            }
+        }
+
         isTyping = false;
         ShowContinueIndicator();
     }
+
 
     void ShowContinueIndicator()
     {
@@ -140,7 +173,29 @@ public class DialogueManager : MonoBehaviour
     void EndDialogue()
     {
         dialogueBox.SetActive(false);
+
+        // Limpiar los textos
+        dialogueText.text = "";
+        nameText.text = "";
+
+        // Ocultar indicador
+        if (continueIndicator != null)
+            continueIndicator.SetActive(false);
         Debug.Log("Diálogo terminado");
+        if (changeSceneOnEnd)
+        {
+            if (nextSceneIndex >= 0)
+            {
+                // Usar índice si está configurado
+                SceneManager.LoadScene(nextSceneIndex);
+            }
+            else if (nextSceneName != "")
+            {
+                // Usar nombre si está configurado
+                SceneManager.LoadScene(nextSceneName);
+            }
+
+        }
     }
 
     public void StartNewDialogue(string[] newDialogues, string[] newNames = null)
