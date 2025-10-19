@@ -39,23 +39,22 @@ public class ControlPersonaje : MonoBehaviour
             Invoke("CambiarEscenaLuegoDeMuerte", tiempoEspera);
         
         }
-       
+
     }
 
-        // Detectar si Shift izquierdo está presionado con el nuevo Input System
         if (Keyboard.current.leftShiftKey.isPressed && canDash)
         {
             StartCoroutine(Dash());  // Inicia el Dash
             velocidad = 7f;
-        }
-        else
-        {
+                }
+            else
+            {
             velocidad = 5f;
-        }
+                }
 
-        
-        // Si no estamos dashing, procesamos el movimiento
-        if (!isDashing)
+
+// Si no estamos dashing, procesamos el movimiento
+if (!isDashing)
         {
             ProcesarMovimiento();
             float velocidadHorizontal = Mathf.Abs(myrigidBody2D.linearVelocity.x);
@@ -97,9 +96,9 @@ public class ControlPersonaje : MonoBehaviour
 
 
     void CambiarEscenaLuegoDeMuerte()
-        {
-            SceneManager.LoadScene(MenuInicio);
-        }
+    {
+    SceneManager.LoadScene("MenuInicio");  
+    }
 
 void ProcesarMovimiento()
     {
