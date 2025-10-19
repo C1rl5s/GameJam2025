@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem;  // Necesario para usar el nuevo Input System
+using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
@@ -15,58 +15,49 @@ public class ControlPersonaje : MonoBehaviour
     private bool canDash = true;
     private bool isDashing;
     private float dashingPower = 24f;
-    private float dashingCooldown = 0.5f;  // Tiempo de espera entre dashes (código corregido)
+    private float dashingCooldown = 0.5f;
     private float dashingTime = 0.2f;
     private bool onFloor = false;
     private float jumpForce = 10f;
-    private float tiempoespera = 30f;
-    
+    private float tiempoEspera = 30f;
 
-    private Vector2 movimiento;  // Variable para almacenar el movimiento horizontal
+    private Vector2 movimiento;
 
-    // Llamado cuando se recibe input del movimiento (configurado en el nuevo Input System)
+    // Llamado cuando se recibe input del movimiento
     void OnMove(InputValue value)
     {
-        movimiento = value.Get<Vector2>();  // Guarda el valor de movimiento (eje X y Y)
+        movimiento = value.Get<Vector2>();
     }
-
-
-
 
     void Update()
     {
-        if (youDied) {
-
+        if (youDied)
+        {
             Invoke("CambiarEscenaLuegoDeMuerte", tiempoEspera);
-
         }
-
 
         if (Keyboard.current.leftShiftKey.isPressed && canDash)
         {
-            StartCoroutine(Dash());  // Inicia el Dash
+            StartCoroutine(Dash());
             velocidad = 7f;
         }
         else
         {
             velocidad = 5f;
         }
-    }
 
-// Si no estamos dashing, procesamos el movimiento
-if (!isDashing)
+        // Si no estamos dashing, procesamos el movimiento
+        if (!isDashing)
         {
             ProcesarMovimiento();
             float velocidadHorizontal = Mathf.Abs(myrigidBody2D.linearVelocity.x);
             animator.SetFloat("Speed", velocidadHorizontal);
 
-
             // Movimiento hacia la derecha con la tecla "D"
             if (Keyboard.current.rightArrowKey.isPressed)
             {
-                myrigidBody2D.linearVelocity = new Vector2(velocidad, myrigidBody2D.linearVelocity.y);  // Mueve al personaje a la derecha
+                myrigidBody2D.linearVelocity = new Vector2(velocidad, myrigidBody2D.linearVelocity.y);
                 facingRight = true;
-                
                 animator.SetFloat("Speed", velocidad);
                 transform.localScale = new Vector3(1, 1, 1);
             }
@@ -74,9 +65,8 @@ if (!isDashing)
             // Movimiento hacia la izquierda con la tecla "A"
             if (Keyboard.current.leftArrowKey.isPressed)
             {
-                myrigidBody2D.linearVelocity = new Vector2(-velocidad, myrigidBody2D.linearVelocity.y);  // Mueve al personaje a la izquierda
+                myrigidBody2D.linearVelocity = new Vector2(-velocidad, myrigidBody2D.linearVelocity.y);
                 facingRight = false;
-               
                 animator.SetFloat("Speed", velocidad);
                 transform.localScale = new Vector3(-1, 1, 1);
             }
@@ -84,7 +74,7 @@ if (!isDashing)
             // Movimiento hacia abajo con la tecla "S"
             if (Keyboard.current.downArrowKey.isPressed)
             {
-                myrigidBody2D.linearVelocity = new Vector2(myrigidBody2D.linearVelocity.x, -velocidad);  // Mueve al personaje hacia abajo
+                myrigidBody2D.linearVelocity = new Vector2(myrigidBody2D.linearVelocity.x, -velocidad);
             }
 
             if (onFloor && Keyboard.current.zKey.isPressed)
@@ -94,97 +84,68 @@ if (!isDashing)
         }
     }
 
-
     void CambiarEscenaLuegoDeMuerte()
-
-        {
-            SceneManager.LoadScene(1);
-        }
-
-void ProcesarMovimiento()
     {
-        // Lógica de movimiento horizontal (puede ser a la izquierda o derecha)
+        SceneManager.LoadScene(1);
+    }
+
+    void ProcesarMovimiento()
+    {
         myrigidBody2D.linearVelocity = new Vector2(movimiento.x * velocidad, myrigidBody2D.linearVelocity.y);
     }
 
     private IEnumerator Dash()
     {
         float localDashingPower;
-        // Cambia la dirección del dash según la orientación del personaje
+
         if (!facingRight)
         {
-            localDashingPower = -dashingPower;  // Dash hacia la izquierda si no está mirando a la derecha
+            localDashingPower = -dashingPower;
         }
         else
         {
-            localDashingPower = dashingPower;  // Dash hacia la derecha
+            localDashingPower = dashingPower;
         }
 
-        canDash = false;  // Deshabilita el dash para evitar usarlo mientras está activo
-        isDashing = true; // Establece que estamos haciendo un dash
+        canDash = false;
+        isDashing = true;
 
-        // Guardamos la gravedad original para restaurarla después
         float ogGravity = myrigidBody2D.gravityScale;
-        myrigidBody2D.gravityScale = 0; // Desactivamos la gravedad durante el dash
-
-        // Establece la velocidad del dash (sin gravedad, solo movimiento horizontal)
+        myrigidBody2D.gravityScale = 0;
         myrigidBody2D.linearVelocity = new Vector2(localDashingPower, 0f);
 
-        // Esperamos el tiempo del dash
         yield return new WaitForSeconds(dashingTime);
 
-        // Restauramos la gravedad original
         myrigidBody2D.gravityScale = ogGravity;
-        isDashing = false;  // Terminamos el dash
+        isDashing = false;
 
-        // Esperamos el tiempo de cooldown antes de permitir otro dash
         yield return new WaitForSeconds(dashingCooldown);
-
-        canDash = true;  // Ahora podemos hacer otro dash
+        canDash = true;
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        // Comprobar si el jugador está tocando un suelo
         if (col.CompareTag("Suelo"))
         {
-            onFloor = true;  // El jugador está tocando el suelo
+            onFloor = true;
         }
-    }
 
-
-    // Detecta cuando el jugador sale del trigger del suelo
-    void OnTriggerExit2D(Collider2D col)
-    {
-        // Comprobar si el jugador salió del suelo
-        if (col.CompareTag("Suelo"))
-        {
-            onFloor = false;  // El jugador ya no está tocando el suelo
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D col)
-    {
-        // Comprobar si el jugador salió del objeto
         if (col.CompareTag("Obstaculo"))
         {
-
-            // El jugador ya no está tocando el objeto
-        }
-    }
-
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        // Comprobar si el jugador está tocando un obstaculo
-        if (col.CompareTag("Obstaculo"))
-        {
-            vida=-10// El jugador está tocando el objeto
-            if (vida < 0) {
+            vida -= 10;  // ESTO ESTABA MAL: vida=-10 (faltaba el punto y coma)
+            if (vida <= 0)
+            {
                 youDied = true;
-                SceneManager.LoadScene(Muerte);
-
+                SceneManager.LoadScene(4);
             }
+        }
+    }
 
+    void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.CompareTag("Suelo"))
+        {
+            onFloor = false;
         }
     }
 }
