@@ -35,27 +35,23 @@ public class ControlPersonaje : MonoBehaviour
 
     void Update()
     {
-        if (youDied) { 
-            
-            Invoke("CambiarEscenaLuegoDeMuerte", tiempoEspera);
-        
-        }
-<<<<<<< HEAD
+        if (youDied) {
 
-    }
-=======
->>>>>>> 75c1ccf165f3d540572820dff235270b4fcf7f93
+            Invoke("CambiarEscenaLuegoDeMuerte", tiempoEspera);
+
+        }
+
 
         if (Keyboard.current.leftShiftKey.isPressed && canDash)
         {
             StartCoroutine(Dash());  // Inicia el Dash
             velocidad = 7f;
-                }
-            else
-            {
+        }
+        else
+        {
             velocidad = 5f;
-                }
-
+        }
+    }
 
 // Si no estamos dashing, procesamos el movimiento
 if (!isDashing)
@@ -100,15 +96,10 @@ if (!isDashing)
 
 
     void CambiarEscenaLuegoDeMuerte()
-<<<<<<< HEAD
-    {
-    SceneManager.LoadScene("MenuInicio");  
-    }
-=======
+
         {
             SceneManager.LoadScene(1);
         }
->>>>>>> 75c1ccf165f3d540572820dff235270b4fcf7f93
 
 void ProcesarMovimiento()
     {
