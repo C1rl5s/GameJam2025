@@ -133,7 +133,7 @@ public class ControlPersonaje : MonoBehaviour
         if (vida <= 0)
         {
             youDied = true;
-            SceneManager.LoadScene(4);
+            SceneManager.LoadScene(3);
         }
     }
 
