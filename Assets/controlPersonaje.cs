@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;  // Necesario para usar el nuevo Input System
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class ControlPersonaje : MonoBehaviour
 {
@@ -39,8 +40,11 @@ public class ControlPersonaje : MonoBehaviour
             Invoke("CambiarEscenaLuegoDeMuerte", tiempoEspera);
         
         }
+<<<<<<< HEAD
 
     }
+=======
+>>>>>>> 75c1ccf165f3d540572820dff235270b4fcf7f93
 
         if (Keyboard.current.leftShiftKey.isPressed && canDash)
         {
@@ -96,9 +100,15 @@ if (!isDashing)
 
 
     void CambiarEscenaLuegoDeMuerte()
+<<<<<<< HEAD
     {
     SceneManager.LoadScene("MenuInicio");  
     }
+=======
+        {
+            SceneManager.LoadScene(1);
+        }
+>>>>>>> 75c1ccf165f3d540572820dff235270b4fcf7f93
 
 void ProcesarMovimiento()
     {
