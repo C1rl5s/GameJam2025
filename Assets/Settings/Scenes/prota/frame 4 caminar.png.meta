@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 800ba5716fce5c54798c91ecdfe402fc
+guid: 100e0f8d247421140b5cad829872108f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4742078047685426992
-    second: Prota final_0
+      213: 4927231823896708363
+    second: frame 4 caminar_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 10
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Prota final_0
+      name: frame 4 caminar_0
       rect:
         serializedVersion: 2
-        x: 28
-        y: 0
-        width: 38
-        height: 96
+        x: 25
+        y: 1
+        width: 43
+        height: 95
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 03fb7791cde3fc140800000000000000
-      internalID: 4742078047685426992
+      spriteID: b050d5dfc3b016440800000000000000
+      internalID: 4927231823896708363
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Prota final_0: 4742078047685426992
+      frame 4 caminar_0: 4927231823896708363
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

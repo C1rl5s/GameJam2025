@@ -7,6 +7,7 @@ public class ControlPersonaje : MonoBehaviour
     public float velocidad = 5f;
     public Rigidbody2D myrigidBody2D;
     public bool facingRight;
+    public Animator animator;
 
     private bool canDash = true;
     private bool isDashing;
@@ -15,7 +16,7 @@ public class ControlPersonaje : MonoBehaviour
     private float dashingTime = 0.2f;
     private bool onFloor = false;
     private float jumpForce = 10f;
-    public Animator animator;
+    
 
     private Vector2 movimiento;  // Variable para almacenar el movimiento horizontal
 
@@ -24,6 +25,9 @@ public class ControlPersonaje : MonoBehaviour
     {
         movimiento = value.Get<Vector2>();  // Guarda el valor de movimiento (eje X y Y)
     }
+
+
+    
 
     void Update()
     {
