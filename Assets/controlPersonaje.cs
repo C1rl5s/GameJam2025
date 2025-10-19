@@ -123,6 +123,20 @@ public class ControlPersonaje : MonoBehaviour
         canDash = true;
     }
 
+    public void RecibirDano(int cantidad)
+    {
+        vida -= cantidad;
+        Debug.Log("Vida actual: " + vida);
+
+        // Aquí puedes agregar efectos visuales, sonidos, etc.
+
+        if (vida <= 0)
+        {
+            youDied = true;
+            SceneManager.LoadScene(4);
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Suelo"))
@@ -132,21 +146,15 @@ public class ControlPersonaje : MonoBehaviour
 
         if (col.CompareTag("Obstaculo"))
         {
-            Debug.Log("bonk");
-            vida -= 10; 
-            if (vida <= 0)
-            {
-                youDied = true;
-                SceneManager.LoadScene(4);
-            }
+            RecibirDano(20);
         }
-    }
 
-    void OnTriggerExit2D(Collider2D col)
-    {
-        if (col.CompareTag("Suelo"))
+        void OnTriggerExit2D(Collider2D col)
         {
-            onFloor = false;
+            if (col.CompareTag("Suelo"))
+            {
+                onFloor = false;
+            }
         }
     }
 }

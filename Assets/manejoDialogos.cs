@@ -181,7 +181,7 @@ public class DialogueManager : MonoBehaviour
         // Ocultar indicador
         if (continueIndicator != null)
             continueIndicator.SetActive(false);
-        Debug.Log("Diálogo terminado");
+        
         if (changeSceneOnEnd)
         {
             if (nextSceneIndex >= 0)
