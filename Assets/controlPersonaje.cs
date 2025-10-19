@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;  // Necesario para usar el nuevo Input System
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class ControlPersonaje : MonoBehaviour
 {
@@ -39,8 +40,6 @@ public class ControlPersonaje : MonoBehaviour
             Invoke("CambiarEscenaLuegoDeMuerte", tiempoEspera);
         
         }
-       
-    }
 
         // Detectar si Shift izquierdo está presionado con el nuevo Input System
         if (Keyboard.current.leftShiftKey.isPressed && canDash)
@@ -98,7 +97,7 @@ public class ControlPersonaje : MonoBehaviour
 
     void CambiarEscenaLuegoDeMuerte()
         {
-            SceneManager.LoadScene(MenuInicio);
+            SceneManager.LoadScene(1);
         }
 
 void ProcesarMovimiento()
