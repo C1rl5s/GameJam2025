@@ -1,4 +1,4 @@
-uusing UnityEngine;
+using UnityEngine;
 
 public class Movimiento_Camara : MonoBehaviour
 {
