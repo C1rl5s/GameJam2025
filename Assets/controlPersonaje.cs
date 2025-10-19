@@ -132,7 +132,8 @@ public class ControlPersonaje : MonoBehaviour
 
         if (col.CompareTag("Obstaculo"))
         {
-            vida -= 10;  // ESTO ESTABA MAL: vida=-10 (faltaba el punto y coma)
+            Debug.Log("bonk");
+            vida -= 10; 
             if (vida <= 0)
             {
                 youDied = true;
