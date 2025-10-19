@@ -8,6 +8,8 @@ public class ControlPersonaje : MonoBehaviour
     public Rigidbody2D myrigidBody2D;
     public bool facingRight;
     public Animator animator;
+    public int vida = 30;
+    private bool youDied = false;
 
     private bool canDash = true;
     private bool isDashing;
@@ -16,6 +18,7 @@ public class ControlPersonaje : MonoBehaviour
     private float dashingTime = 0.2f;
     private bool onFloor = false;
     private float jumpForce = 10f;
+    private float tiempoespera = 30f;
     
 
     private Vector2 movimiento;  // Variable para almacenar el movimiento horizontal
@@ -27,10 +30,18 @@ public class ControlPersonaje : MonoBehaviour
     }
 
 
-    
+
 
     void Update()
     {
+        if (youDied) { 
+            
+            Invoke("CambiarEscenaLuegoDeMuerte", tiempoEspera);
+        
+        }
+       
+    }
+
         // Detectar si Shift izquierdo está presionado con el nuevo Input System
         if (Keyboard.current.leftShiftKey.isPressed && canDash)
         {
@@ -42,6 +53,7 @@ public class ControlPersonaje : MonoBehaviour
             velocidad = 5f;
         }
 
+        
         // Si no estamos dashing, procesamos el movimiento
         if (!isDashing)
         {
@@ -83,7 +95,13 @@ public class ControlPersonaje : MonoBehaviour
         }
     }
 
-    void ProcesarMovimiento()
+
+    void CambiarEscenaLuegoDeMuerte()
+        {
+            SceneManager.LoadScene(MenuInicio);
+        }
+
+void ProcesarMovimiento()
     {
         // Lógica de movimiento horizontal (puede ser a la izquierda o derecha)
         myrigidBody2D.linearVelocity = new Vector2(movimiento.x * velocidad, myrigidBody2D.linearVelocity.y);
@@ -134,6 +152,7 @@ public class ControlPersonaje : MonoBehaviour
         }
     }
 
+
     // Detecta cuando el jugador sale del trigger del suelo
     void OnTriggerExit2D(Collider2D col)
     {
@@ -141,6 +160,31 @@ public class ControlPersonaje : MonoBehaviour
         if (col.CompareTag("Suelo"))
         {
             onFloor = false;  // El jugador ya no está tocando el suelo
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D col)
+    {
+        // Comprobar si el jugador salió del objeto
+        if (col.CompareTag("Obstaculo"))
+        {
+
+            // El jugador ya no está tocando el objeto
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        // Comprobar si el jugador está tocando un obstaculo
+        if (col.CompareTag("Obstaculo"))
+        {
+            vida=-10// El jugador está tocando el objeto
+            if (vida < 0) {
+                youDied = true;
+                SceneManager.LoadScene(Muerte);
+
+            }
+
         }
     }
 }
